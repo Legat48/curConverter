@@ -1,10 +1,8 @@
-// import colors from 'vuetify/es5/util/colors'
 
 export default {
-  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - test',
-    title: 'test-technesis',
+    title: 'cur-converter',
     htmlAttrs: {
       lang: 'ru'
     },
@@ -26,9 +24,8 @@ export default {
     }
   },
   router: {
-    base: '/test-technesis/'
+    base: '/cur-converter/'
   },
-  // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/styles/main.scss'
   ],
@@ -36,35 +33,27 @@ export default {
     scss: ['~/assets/styles/scss/*.scss']
   },
 
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
   ],
 
-  // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify'
   ],
 
-  // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/style-resources',
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'cookie-universal-nuxt',
+    '@nuxt/image'
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/'
   },
 
-  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/styles/scss/variables.scss'],
     theme: {
@@ -74,7 +63,6 @@ export default {
     }
   },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
 }

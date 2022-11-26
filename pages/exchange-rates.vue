@@ -1,16 +1,47 @@
 <template>
-  <v-container class="convecter">
+  <v-container class="exchange-rates">
     <base-menu v-model="lang" :link="link" :text="layoutText.link" />
+    <v-menu transition="scroll-x-transition" content-class="exchange-rates__menu">
+      <template #activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          class="ma-2"
+          v-bind="attrs"
+          v-on="on"
+        >
+          {{ layoutText.btn }} {{ baseCur }}
+        </v-btn>
+      </template>
+      <v-list dense max-height="50vh" class="exchange-rates__dropdown">
+        <v-list-item
+          v-for="(cur, index) in curData.curArr"
+          :key="index"
+          color="white"
+          button
+          @click="baseCur = cur.name"
+        >
+          <v-list-item-title>
+            {{ cur.name }}
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <h1>
       {{ layoutText.title }}
     </h1>
-    <cur-input-query class="convecter__query" :cur-data="curData" :lang="lang" />
-    <cur-select-converter
-      class="convecter__select-converter"
-      :cur-data="curData"
-      :base-cur="baseCur"
-      :lang="lang"
-    />
+    <v-container class="exchange-rates__list">
+      <v-card v-for="(item, index) in baseCurData.curArr" :key="index" elevation="2">
+        <v-card-text>
+          {{ item.name }}
+          <v-icon v-if="item.icon" dense>
+            mdi-{{ item.icon }}
+          </v-icon>
+        </v-card-text>
+        <v-card-text>
+          {{ 1 / (Math.round(item.curConvertValue * 10000) / 10000) | numberFormat }} {{ baseCur }}
+        </v-card-text>
+      </v-card>
+    </v-container>
   </v-container>
 </template>
 
@@ -26,15 +57,12 @@ export default {
     return {
       lang: 'ru',
       baseCur: 'RUB',
-      link: '/exchange-rates/'
+      link: '/'
     }
   },
   computed: {
     curData () {
       return this.$store.getters['cur/getCurData'] || []
-    },
-    pages () {
-      return this.$route.path
     },
     baseCurData () {
       const baseCurData = {
@@ -50,20 +78,19 @@ export default {
       }
       return baseCurData || {}
     },
-    selectCurArr () {
-      return this.curData.curArr.map(e => e.name) || []
-    },
     layoutText () {
       if (this.lang !== 'en') {
         return {
-          link: 'Все курсы',
-          title: 'Конвектор валют:',
+          link: 'Конвектор валют',
+          title: 'Курсы валют относительно базовой:',
+          btn: 'Базовая валюта: ',
           curConvertValueError: 'Не найдена пара валют'
         }
       } else {
         return {
-          link: 'Exchange rates',
-          title: 'Currency Converter:',
+          link: 'Currency Converter',
+          title: 'Exchange rates relative to the base:',
+          btn: 'Base currency: ',
           curConvertValueError: 'Currency pair not found'
         }
       }
@@ -90,28 +117,24 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
-.convecter {
+.exchange-rates {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: sizeIncr($min: 15, $max: 30);
   padding-top: sizeDecr($min: 15, $max: 50);
-  &__query,
-  &__select-converter {
-    width: 100%;
-  }
-  &__container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 20px;
+  &__list {
+    display: grid;
+    grid-auto-flow: dense;
+    grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
+    gap: sizeDecr($min: 10, $max: 20);
   }
   &__row {
     width: 100%;
   }
+  &__menu {
+    background-color: #fff;
+  }
 }
-
 </style>
